@@ -17,7 +17,7 @@
         },
         "dataSources": {
             "mainService": {
-                "uri": "/catalog/",
+                "uri": "catalog/",
                 "type": "OData",
                 "settings": {
                     "annotations": [],
@@ -148,9 +148,5 @@
     "sap.fiori": {
         "registrationIds": [],
         "archeType": "transactional"
-    },
-    "sap.cloud": {
-        "service": "com.demo.listreport",
-        "public": true
     }
 }

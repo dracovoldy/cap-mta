@@ -1,0 +1,30 @@
+---
+applications:
+- name: cap-mta-srv
+  env:
+    DEPLOY_ATTRIBUTES: |-
+      {
+        "app-content-digest" : "C42949EED4A23469CD324FB8B0E8D1AB"
+      }
+  buildpacks:
+  - nodejs_buildpack
+  stack: cflinuxfs4
+  routes:
+  - route: 1d199ffctrial-dev-cap-mta-srv.cfapps.us10-001.hana.ondemand.com
+    protocol: http1
+  metadata:
+    labels:
+      mta_id: 373b5b9f3b094593ab50778ea437a910
+    annotations:
+      mta_id: cap-mta
+      mta_version: 1.0.0
+      mta_module: '{"name":"cap-mta-srv"}'
+      mta_module_provided_dependencies: "[]"
+      mta_bound_services: "[]"
+  processes:
+  - type: web
+    instances: 1
+    memory: 1024M
+    disk_quota: 1024M
+    log-rate-limit-per-second: -1
+    health-check-type: port
