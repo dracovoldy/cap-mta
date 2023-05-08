@@ -148,5 +148,9 @@
     "sap.fiori": {
         "registrationIds": [],
         "archeType": "transactional"
+    },
+    "sap.cloud": {
+        "service": "com.solution.name",
+        "public": true
     }
 }

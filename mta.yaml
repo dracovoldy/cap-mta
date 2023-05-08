@@ -4,7 +4,7 @@ description: A simple CAP project.
 version: 1.0.0
 modules:
 
-# CAP Module
+# CAP Module (no-change)
 - name: cap-mta-srv
   type: nodejs
   path: gen/srv
@@ -17,7 +17,7 @@ modules:
   build-parameters:
     builder: npm-ci
 
-# GACD Deployer
+# Deployer Module (no-change)
 - name: cap-mta-app-content
   type: com.sap.application.content
   path: .
@@ -33,7 +33,7 @@ modules:
       name: mylistreport
       target-path: resources/
 
-# HTML5 Module
+# HTML Module (no-change)
 - name: mylistreport
   type: html5
   path: app/my-list-report
@@ -45,9 +45,40 @@ modules:
     - npm run build:cf
     supported-platforms: []
 
+# Destination Content Module (New)
+- name: cap-mta-destination-content
+  type: com.sap.application.content
+  requires:
+  - name: cap-mta-destination-service
+    parameters:
+      content-target: true
+  - name: cap-mta-repo-host
+    parameters:
+      service-key:
+        name: cap-mta-repo-host-key
+  - name: uaa_cap-mta
+    parameters:
+      service-key:
+        name: uaa_cap-mta-key
+  parameters:
+    content:
+      instance:
+        destinations:
+        - Name: com_solution_name_cap_mta_repo_host
+          ServiceInstanceName: cap-mta-html5-srv
+          ServiceKeyName: cap-mta-repo-host-key
+          sap.cloud.service: com.solution.name
+        - Authentication: OAuth2UserTokenExchange
+          Name: com_solution_name_uaa_cap_mta
+          ServiceInstanceName: cap-mta-xsuaa-service
+          ServiceKeyName: uaa_cap-mta-key
+          sap.cloud.service: com.solution.name
+        existing_destinations_policy: ignore
+  build-parameters:
+    no-source: true
 
 resources:
-# App Host (HTML5 service)
+# HTML5 app content service (no-change)
 - name: cap-mta-repo-host
   type: org.cloudfoundry.managed-service
   parameters:
@@ -55,7 +86,18 @@ resources:
     service-name: cap-mta-html5-srv
     service-plan: app-host
 
-# Destination Service
+# # Destination Service (updated)
+# - name: cap-mta-destination-service
+#   type: org.cloudfoundry.managed-service
+#   parameters:
+#     config:
+#       HTML5Runtime_enabled: true
+#       version: 1.0.0
+#     service: destination
+#     service-name: cap-mta-destination-service
+#     service-plan: lite
+
+# Destination Service (actual)
 - name: cap-mta-destination-service
   type: org.cloudfoundry.managed-service
   parameters:
@@ -83,6 +125,17 @@ resources:
     service-plan: lite
   requires:
   - name: srv-api
+
+# XSUAA Service
+- name: uaa_cap-mta
+  type: org.cloudfoundry.managed-service
+  parameters:
+    path: ./xs-security.json
+    service: xsuaa
+    service-name: cap-mta-xsuaa-service
+    service-plan: application
+
+# Global Parameters
 parameters:
   deploy_mode: html5-repo
   enable-parallel-deployments: true

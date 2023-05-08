@@ -150,7 +150,7 @@
         "archeType": "transactional"
     },
     "sap.cloud": {
-        "service": "com.demo.listreport",
+        "service": "com.solution.name",
         "public": true
     }
 }
